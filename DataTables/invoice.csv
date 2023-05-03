@@ -1,0 +1,2 @@
+HotelName;InvoiceDate;DueDate;InvoiceNumber;BookingCode;CustomerDetails;Room;CheckIn;CheckOut;TotalStayCount;TotalStayAmount;DepositNow;Tax&VAT;TotalAmount
+Rendezvous Hotel;14/01/2018;15/01/2018;110;0875;JOHNY SMITH\r\nR2,AVENUE DU MAROC\r\n123456;Superior Double;14/01/2018;15/01/2018;1;150;20.90;19.00;209.00
