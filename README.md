@@ -8,7 +8,7 @@
 
 <!-- GETTING STARTED -->
 ## Getting Started
-d running follow these simple example steps.
+
 
 ### Prerequisites
 
