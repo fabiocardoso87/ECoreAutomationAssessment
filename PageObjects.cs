@@ -18,7 +18,6 @@ namespace EcoreAutomationProject
         {
             return Driver.Url = mainUrl;
         }
-
         public IWebElement GetInputUsername()
         {
             return Driver.FindElement(By.Name("username"));
@@ -54,7 +53,6 @@ namespace EcoreAutomationProject
         public IWebElement GetErrorMsg()
         {
             return Driver.FindElement(By.XPath("//*[contains(@class,'alert')]"));
-
         }
         public void CheckErrorMessage(string errorMsg)
         {
@@ -63,7 +61,6 @@ namespace EcoreAutomationProject
 		public IWebElement LandingPageTitle()
 		{
 			return Driver.FindElement(By.XPath("//h2[contains(@class, 'mt-5') and contains(text(), 'Invoice List')]"));
-
 		}
 		
         public IWebElement InvoiceLink()
@@ -79,14 +76,11 @@ namespace EcoreAutomationProject
 		public IWebElement HotelName()
 		{
 			return Driver.FindElement(By.XPath("//h4[contains(@class, 'mt-5')]"));
-
 		}
 
 		public IWebElement InvoiceDate()
-		{
-            //var el = Driver.FindElement(By.XPath("//*[text()='14/01/2018']"));
+		{            
             return Driver.FindElement(By.XPath("//*[text()=' 14/01/2018']"));
-
         }
 		public IWebElement DueDate()
 		{	
@@ -135,7 +129,7 @@ namespace EcoreAutomationProject
 
 		public IWebElement DepositNow()
 		{
-			return Driver.FindElement(By.XPath("///table[2]/tbody/tr/td[1]"));
+			return Driver.FindElement(By.XPath("//table[2]/tbody/tr/td[1]"));
 		}
 
 		public IWebElement TaxandVAT()
