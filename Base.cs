@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
 
@@ -15,6 +16,9 @@ namespace EcoreAutomationProject
             try
             {
                 new DriverManager().SetUpDriver(new ChromeConfig());
+                Driver = new ChromeDriver();
+                Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+                Driver.Manage().Window.Maximize();
 
             }
             catch (DriverServiceNotFoundException er)
@@ -26,11 +30,7 @@ namespace EcoreAutomationProject
         [TestCleanup]
         public void TestCleanup()
         {
-            if (Driver != null)
-            {
-                Driver.Close();
-                Driver.Dispose();
-            }
+            Driver?.Quit();
         }
     }
 }

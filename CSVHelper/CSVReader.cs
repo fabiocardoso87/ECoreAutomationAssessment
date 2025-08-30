@@ -1,11 +1,5 @@
 ﻿using LINQtoCSV;
-using OpenQA.Selenium.DevTools.V110.Debugger;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace EcoreAutomationProject.CSVHelper
 {
@@ -65,7 +59,7 @@ namespace EcoreAutomationProject.CSVHelper
 							Assert.AreEqual(value.CheckIn, CheckIn().Text);
 							Assert.AreEqual(value.CheckOut, CheckOut().Text);
 							Assert.AreEqual(value.TotalStayCount, TotalStayCount().Text);
-							Assert.AreEqual(value.TotalStayAmount, TotalStayAmount());
+							Assert.AreEqual(value.TotalStayAmount, TotalStayAmount().Text);
 							Assert.AreEqual(value.DepositNow, DepositNow().Text);
 							Assert.AreEqual(value.TaxandVAT, TaxandVAT().Text);
 							Assert.AreEqual(value.TotalAmount, TotalAmount().Text);

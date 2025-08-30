@@ -12,7 +12,7 @@ namespace EcoreAutomationProject
 		PageObjects page = new();
 		public  void IsLandingPageDisplayed(string msg)
 		{
-			Assert.IsTrue(page.LandingPageTitle().Text.Contains(msg));
+            Assert.IsTrue(page.LandingPageTitle().Text.Contains(msg));
 		}
 		public void SwitchToTab()
 		{
