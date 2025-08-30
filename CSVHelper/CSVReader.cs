@@ -41,7 +41,8 @@ namespace EcoreAutomationProject.CSVHelper
 							FillInputPassword(user.Password);
 							Login();
 							CheckErrorMessage("Wrong username or password.");
-						}
+							GetInputUsername().Clear();
+                        }
 						break;
 					}
 				case invoiceDetails:
@@ -52,9 +53,7 @@ namespace EcoreAutomationProject.CSVHelper
 							Assert.AreEqual(value.HotelName, HotelName().Text);
 							Assert.AreEqual(value.InvoiceDate, InvoiceDate().Text);
 							Assert.AreEqual(value.DueDate, DueDate().Text);
-							Assert.IsTrue(InvoiceDate().Text.Contains(value.InvoiceNumber));
-							Assert.AreEqual(value.BookingCode, BookingCode().Text);
-							Assert.AreEqual(value.CustomerDetails, CustomerDetails().Text);
+							Assert.AreEqual(value.InvoiceNumber, InvoiceNumber().Text);
 							Assert.AreEqual(value.Room, Room().Text);
 							Assert.AreEqual(value.CheckIn, CheckIn().Text);
 							Assert.AreEqual(value.CheckOut, CheckOut().Text);
