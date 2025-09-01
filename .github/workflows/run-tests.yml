@@ -33,11 +33,15 @@ jobs:
         Remove-Item "chrome_installer.exe"
 
     - name: Run tests
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx"
 
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-results
-        path: TestResults/
+        path: |
+          **/TestResults/*.trx
+          **/TestResults/*.html
+        if-no-files-found: ignore 
+        
