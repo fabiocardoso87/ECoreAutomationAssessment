@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
     
 jobs:
-  Test Run:
+  Selenium-Tests:
     runs-on: windows-latest
 
     steps:
