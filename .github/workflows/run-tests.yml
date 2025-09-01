@@ -7,8 +7,8 @@ on:
     branches: [ "master" ]
     
 jobs:
-  test:
-    runs-on: windows-latest  # ou ubuntu-latest
+  Test Run:
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
@@ -32,16 +32,17 @@ jobs:
         Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Wait
         Remove-Item "chrome_installer.exe"
 
-    - name: Run tests
-      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx"
+    - name: Run tests with reporting
+      run: |
+        New-Item -ItemType Directory -Path TestResults -Force
+        dotnet test --configuration Release --no-build --verbosity normal `
+          --logger "trx;LogFileName=test-results.trx" `
+          --logger "html;LogFileName=test-results.html" `
+          --results-directory TestResults
 
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-results
-        path: |
-          **/TestResults/*.trx
-          **/TestResults/*.html
-        if-no-files-found: ignore 
-        
+        path: TestResults/
