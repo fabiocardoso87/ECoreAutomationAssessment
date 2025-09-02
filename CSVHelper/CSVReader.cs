@@ -41,7 +41,8 @@ namespace EcoreAutomationProject.CSVHelper
 							FillInputPassword(user.Password);
 							Login();
 							CheckErrorMessage("Wrong username or password.");
-						}
+							GetInputUsername().Clear();
+                        }
 						break;
 					}
 				case invoiceDetails:
