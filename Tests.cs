@@ -10,7 +10,7 @@ namespace EcoreAutomationProject
 		private readonly CSVReader csv = new();
 		private readonly Helper helper = new();
 
-        [TestCategory("Smoke")]
+        [TestCategory("smoke")]
 		[TestMethod]
         public void TC001_Login_Positive()
         {
@@ -20,7 +20,7 @@ namespace EcoreAutomationProject
             helper.IsLandingPageDisplayed("Invoice List");
         }
 
-        [TestCategory("Smoke")]
+        [TestCategory("smoke")]
         [TestMethod]
         public void TC002_Login_Negative()
         {
@@ -28,7 +28,7 @@ namespace EcoreAutomationProject
             csv.ReadCSVFile(CSVReader.loginNegative);
 		}
 
-        [TestCategory("Regression")]
+        [TestCategory("regression")]
         [TestMethod]
 		public void TC003_Validate_Invoice_Details()
         {
