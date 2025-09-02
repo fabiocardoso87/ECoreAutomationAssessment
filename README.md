@@ -2,9 +2,9 @@
 
 ### Built With
 
-* [C#]
-* [.Net]]
-* [MSTest]
+- [C#](https://learn.microsoft.com/en-us/dotnet/csharp/)
+- [.NET](https://dotnet.microsoft.com/)
+- [MSTest](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-csharp-with-mstest)
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -39,9 +39,7 @@ The tests run automatically via GitHub Actions.
 
 | Branch | Status |
 |--------|--------|
-| master | [Master Branch](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions/workflows/run-tests.yml) |
-
-[![Test Status](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions/workflows/run-tests.yml)
+| master | [![Test Status](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions/workflows/run-tests.yml)|
 
 **📊 Latest Test Output:**
 1. Got to [Actions](https://github.com/fabiocardoso87/ECoreAutomationAssessment/actions)
