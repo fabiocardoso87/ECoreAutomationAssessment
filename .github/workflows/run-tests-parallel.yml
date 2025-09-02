@@ -1,0 +1,78 @@
+name: Selenium Tests - Parallel
+
+on:
+  workflow_dispatch:
+    inputs:
+      test-parallel:
+        description: 'Type of tests to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - smoke
+        - regression
+        - integration
+      browser:
+        description: 'Browser to test'
+        required: false
+        default: 'chrome'
+        type: choice
+        options:
+        - chrome
+        - firefox
+        - edge
+jobs:
+  run-tests:
+    runs-on: windows-latest
+    env:
+      TEST_CATEGORY: ${{ github.event.inputs.test-type }}
+      BROWSER: ${{ github.event.inputs.browser }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Install ${{ env.BROWSER }}
+      run: |
+        if ("${{ env.BROWSER }}" -eq "chrome") {
+          $progressPreference = 'SilentlyContinue'
+          Invoke-WebRequest "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "chrome_installer.exe"
+          Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Wait
+          Remove-Item "chrome_installer.exe"
+        }
+
+    - name: Run ${{ env.TEST_CATEGORY }} tests on ${{ env.BROWSER }}
+      run: |
+        $category = "${{ env.TEST_CATEGORY }}"
+        
+        if ($category -eq "all") {
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --logger "trx;LogFileName=test-results.trx" `
+            --logger "html;LogFileName=test-results.html" `
+            --results-directory TestResults
+        } else {
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --filter "Category=$category" `
+            --logger "trx;LogFileName=test-results.trx" `
+            --logger "html;LogFileName=test-results.html" `
+            --results-directory TestResults
+        }
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ env.BROWSER }}-${{ env.TEST_CATEGORY }}
+        path: TestResults/
