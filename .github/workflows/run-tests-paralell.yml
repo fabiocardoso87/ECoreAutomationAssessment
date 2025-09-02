@@ -49,13 +49,20 @@ jobs:
     - name: Run tests
       run: |
         $filter = "${{ env.TEST_FILTER }}"
-        $filterArg = if ($filter) { "--filter `"$filter`"" } else { "" }
+        Write-Host "Filter: $filter"
         
-        dotnet test --configuration Release --no-build --verbosity normal `
-          $filterArg `
-          --logger "trx;LogFileName=test-results.trx" `
-          --logger "html;LogFileName=test-results.html" `
-          --results-directory TestResults
+        if ($filter) {
+            dotnet test --configuration Release --no-build --verbosity normal `
+              --filter "$filter" `
+              --logger "trx;LogFileName=test-results.trx" `
+              --logger "html;LogFileName=test-results.html" `
+              --results-directory TestResults
+        } else {
+            dotnet test --configuration Release --no-build --verbosity normal `
+              --logger "trx;LogFileName=test-results.trx" `
+              --logger "html;LogFileName=test-results.html" `
+              --results-directory TestResults
+        }
 
     - name: Upload test results
       if: always()
