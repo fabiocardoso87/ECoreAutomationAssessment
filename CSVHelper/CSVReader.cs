@@ -1,4 +1,7 @@
 ﻿using LINQtoCSV;
+using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V137.Debugger;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 
 namespace EcoreAutomationProject.CSVHelper
@@ -32,19 +35,23 @@ namespace EcoreAutomationProject.CSVHelper
 						}
 						break;
 					}
+
 				case loginNegative:
 					{
 						var users = csvContext.Read<Users>(locationFolder + dataTable, csvFileDescription);
 						foreach (var user in users)
 						{
-							FillInputUsername(user.Username);
-							FillInputPassword(user.Password);
-							Login();
-							CheckErrorMessage("Wrong username or password.");
-							GetInputUsername().Clear();
-                        }
-						break;
-					}
+			
+								FillInputUsername(user.Username);
+                                FillInputPassword(user.Password);
+								ClickLoginBtn();
+
+                                CheckErrorMessage("Wrong username or password.");
+
+								Thread.Sleep(1000); 
+						}
+                        break;
+                    }
 				case invoiceDetails:
 					{
 						var invoice = csvContext.Read<Invoice>(locationFolder + dataTable, csvFileDescription);
