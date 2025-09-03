@@ -1,4 +1,4 @@
-name: Selenium Tests - Manual Trigger
+name: Selenium Tests
 
 on:
   workflow_dispatch:
@@ -40,22 +40,43 @@ jobs:
         Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Wait
         Remove-Item "chrome_installer.exe"
 
-    - name: Run tests based on input
+    - name: Create TestResults directory
+      run: |
+        New-Item -ItemType Directory -Path TestResults -Force
+        Write-Host "TestResults directory created/cleaned"
+
+    - name: Run tests with detailed reporting
       run: |
         $testType = "${{ github.event.inputs.test-type }}"
         Write-Host "Test type selected: $testType"
         
         if ($testType -eq "all") {
-          Write-Host "Running all tests"
-          dotnet test --configuration Release --no-build --verbosity normal
+          Write-Host "Running all tests with detailed reporting"
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --logger "trx;LogFileName=test-results.trx" `
+            --logger "html;LogFileName=test-results.html" `
+            --results-directory TestResults
         } else {
-          Write-Host "Running $testType tests"
-          dotnet test --configuration Release --no-build --verbosity normal --filter "Category=$testType"
+          Write-Host "Running $testType tests with detailed reporting"
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --filter "Category=$testType" `
+            --logger "trx;LogFileName=test-results-$testType.trx" `
+            --logger "html;LogFileName=test-results-$testType.html" `
+            --results-directory TestResults
+        }
+
+    - name: List generated test files
+      if: always()
+      run: |
+        Write-Host "📁 Contents of TestResults directory:"
+        Get-ChildItem -Path TestResults -Recurse | ForEach-Object {
+          Write-Host "  - $($_.Name) ($($_.Length) bytes)"
         }
 
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results
+        name: test-results-${{ github.event.inputs.test-type }}-${{ github.run_number }}
         path: TestResults/
+        retention-days: 7
