@@ -1,0 +1,89 @@
+name: Selenium Tests - Manual Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: 'Type of tests to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - smoke
+          - regression
+          - integration
+      browser:
+        description: 'Browser to test'
+        required: false
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+
+jobs:
+  run-tests:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Debug inputs
+      run: |
+        Write-Host "Input test-type: '${{ github.event.inputs.test-type }}'"
+        Write-Host "Input browser: '${{ github.event.inputs.browser }}'"
+        Write-Host "Event JSON: ${{ toJSON(github.event) }}"
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Install ${{ github.event.inputs.browser }}
+      run: |
+        if ("${{ github.event.inputs.browser }}" -eq "chrome") {
+          Write-Host "Installing Chrome..."
+          $progressPreference = 'SilentlyContinue'
+          Invoke-WebRequest "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "chrome_installer.exe"
+          Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Wait
+          Remove-Item "chrome_installer.exe"
+          Write-Host "Chrome installed successfully"
+        } else {
+          Write-Host "Installing Firefox..."
+          # Adicione instalação do Firefox se necessário
+        }
+
+    - name: Run ${{ github.event.inputs.test-type }} tests
+      run: |
+        $testType = "${{ github.event.inputs.test-type }}"
+        Write-Host "Running tests for type: '$testType'"
+        
+        if ($testType -eq "all" -or [string]::IsNullOrEmpty($testType)) {
+          Write-Host "🟢 Running ALL tests without filter"
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --logger "trx;LogFileName=test-results.trx" `
+            --logger "html;LogFileName=test-results.html" `
+            --results-directory TestResults
+        } else {
+          Write-Host "🟡 Running filtered tests: Category=$testType"
+          dotnet test --configuration Release --no-build --verbosity normal `
+            --filter "Category=$testType" `
+            --logger "trx;LogFileName=test-results-$testType.trx" `
+            --logger "html;LogFileName=test-results-$testType.html" `
+            --results-directory TestResults
+        }
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ github.event.inputs.test-type }}-${{ github.event.inputs.browser }}
+        path: TestResults/
